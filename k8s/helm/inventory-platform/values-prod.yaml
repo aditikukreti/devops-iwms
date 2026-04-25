@@ -1,0 +1,16 @@
+namespace: inventory-prod
+
+backend:
+  image:
+    repository: your-ecr-repo/backend-api
+    tag: prod
+    pullPolicy: IfNotPresent
+
+frontend:
+  image:
+    repository: your-ecr-repo/frontend
+    tag: prod
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    nodePort: null

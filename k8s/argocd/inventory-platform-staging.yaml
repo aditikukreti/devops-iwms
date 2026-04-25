@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: inventory-platform-staging
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-org/inventory-platform.git
+    targetRevision: HEAD
+    path: k8s/helm/inventory-platform
+    helm:
+      valueFiles:
+        - values-staging.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: inventory-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

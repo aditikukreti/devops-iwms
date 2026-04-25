@@ -1,0 +1,11 @@
+aws_region         = "ap-south-1"
+project_name       = "inventory-platform"
+environment        = "dev"
+create_utility_ec2 = false
+
+# Fill these only if you intentionally want to create EC2 later.
+vpc_id            = "vpc-xxxxxxxx"
+public_subnet_id  = "subnet-xxxxxxxx"
+ec2_ami_id        = "ami-xxxxxxxx"
+key_pair_name     = "your-keypair"
+allowed_ssh_cidrs = ["YOUR_IP/32"]

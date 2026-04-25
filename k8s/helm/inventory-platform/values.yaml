@@ -1,0 +1,42 @@
+namespace: inventory-dev
+
+postgres:
+  image: postgres:16-alpine
+  db: inventory
+  user: inventory
+  password: inventory
+  storage: 2Gi
+  service:
+    port: 5432
+
+backend:
+  image:
+    repository: inventory-platform/backend-api
+    tag: dev
+    pullPolicy: IfNotPresent
+  service:
+    port: 8000
+  databaseUrl: postgresql+psycopg2://inventory:inventory@postgres:5432/inventory
+
+frontend:
+  image:
+    repository: inventory-platform/frontend
+    tag: dev
+    pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30080
+
+ingress:
+  enabled: false
+  className: nginx
+  host: inventory.local
+  tls:
+    enabled: false
+    secretName: inventory-platform-tls
+
+externalSecrets:
+  enabled: false
+  secretStoreName: aws-secretsmanager
+  postgresSecretKey: inventory/dev/postgres

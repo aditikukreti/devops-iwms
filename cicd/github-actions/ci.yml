@@ -1,0 +1,11 @@
+name: ci-reference
+
+on:
+  workflow_dispatch:
+
+jobs:
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow location note
+        run: echo "Use .github/workflows/ci.yml as the active GitHub Actions workflow."

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-api
+  namespace: inventory-dev
+spec:
+  selector:
+    app: backend-api
+  ports:
+    - port: 8000
+      targetPort: 8000

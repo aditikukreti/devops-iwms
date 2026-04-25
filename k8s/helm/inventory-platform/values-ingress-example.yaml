@@ -1,0 +1,14 @@
+namespace: inventory-dev
+
+ingress:
+  enabled: true
+  className: nginx
+  host: inventory.local
+  tls:
+    enabled: true
+    secretName: inventory-platform-tls
+
+externalSecrets:
+  enabled: false
+  secretStoreName: aws-secretsmanager
+  postgresSecretKey: inventory/dev/postgres

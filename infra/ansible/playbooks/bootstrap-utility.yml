@@ -1,0 +1,6 @@
+---
+- name: Bootstrap utility host
+  hosts: utility
+  become: true
+  roles:
+    - common

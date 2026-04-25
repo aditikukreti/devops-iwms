@@ -1,0 +1,6 @@
+apiVersion: v2
+name: inventory-platform
+description: Helm chart for the inventory and warehouse management platform
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

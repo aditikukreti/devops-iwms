@@ -1,0 +1,119 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  frontend-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: apps/frontend/package.json
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build frontend
+        run: npm run build
+
+  trivy-fs-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          trivy-config: trivy.yaml
+          scanners: vuln,misconfig,secret
+
+  trivy-image-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: backend-api
+            context: ./apps/backend-api
+            image_ref: inventory-platform/backend-api:ci
+          - name: frontend
+            context: ./apps/frontend
+            image_ref: inventory-platform/frontend:ci
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t ${{ matrix.image_ref }} ${{ matrix.context }}
+
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: ${{ matrix.image_ref }}
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          vuln-type: os,library
+
+  docker-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and start stack
+        run: docker compose up --build -d
+
+      - name: Wait for backend health
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/health; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Backend health check failed"
+          docker compose logs backend-api postgres
+          exit 1
+
+      - name: Run smoke tests
+        run: bash ./scripts/smoke-test.sh
+
+      - name: Dump logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Tear down stack
+        if: always()
+        run: docker compose down -v
+
+  terraform-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Check Terraform formatting
+        run: terraform fmt -check -recursive infra/terraform

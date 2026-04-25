@@ -1,0 +1,14 @@
+namespace: inventory-dev
+
+backend:
+  image:
+    repository: inventory-platform/backend-api
+    tag: dev
+
+frontend:
+  image:
+    repository: inventory-platform/frontend
+    tag: dev
+  service:
+    type: NodePort
+    nodePort: 30080

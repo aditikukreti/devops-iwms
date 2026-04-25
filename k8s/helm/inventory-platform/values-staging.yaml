@@ -1,0 +1,16 @@
+namespace: inventory-staging
+
+backend:
+  image:
+    repository: your-ecr-repo/backend-api
+    tag: staging
+    pullPolicy: IfNotPresent
+
+frontend:
+  image:
+    repository: your-ecr-repo/frontend
+    tag: staging
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    nodePort: null

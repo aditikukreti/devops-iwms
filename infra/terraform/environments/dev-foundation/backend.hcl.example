@@ -1,0 +1,5 @@
+bucket         = "inventory-platform-unique-state-bucket"
+key            = "dev-foundation/terraform.tfstate"
+region         = "ap-south-1"
+dynamodb_table = "inventory-platform-tf-lock"
+encrypt        = true

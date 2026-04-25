@@ -1,0 +1,16 @@
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+.DS_Store
+.env
+.env.*
+backend.hcl
+terraform.tfvars
+node_modules/
+dist/
+build/
+coverage/
+*.log
+.idea/
+.vscode/

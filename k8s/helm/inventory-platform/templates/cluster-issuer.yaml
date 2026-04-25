@@ -1,0 +1,8 @@
+{{- if and .Values.ingress.enabled .Values.ingress.tls.enabled }}
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-cluster-issuer
+spec:
+  selfSigned: {}
+{{- end }}

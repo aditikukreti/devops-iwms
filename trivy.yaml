@@ -1,0 +1,11 @@
+format: table
+exit-code: 1
+severity:
+  - HIGH
+  - CRITICAL
+ignore-unfixed: true
+scan:
+  skip-dirs:
+    - .git
+    - node_modules
+    - .terraform
