@@ -28,7 +28,7 @@ app = FastAPI(title="Inventory Platform API", version="0.2.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # for now (later restrict)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
