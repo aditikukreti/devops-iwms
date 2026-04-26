@@ -29,6 +29,8 @@ services:
   frontend:
     build:
       context: ./apps/frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://13.236.201.109:8000}
     depends_on:
       - backend-api
     ports:
