@@ -25,10 +25,10 @@ from app.schemas import (
 
 
 app = FastAPI(title="Inventory Platform API", version="0.2.0")
-
+from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # for now (later restrict)
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

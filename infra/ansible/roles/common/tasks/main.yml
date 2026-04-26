@@ -1,4 +1,9 @@
 ---
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+
 - name: Update apt cache on Debian/Ubuntu
   ansible.builtin.apt:
     update_cache: true
@@ -18,7 +23,9 @@
 - name: Install base packages on Amazon Linux/RHEL
   ansible.builtin.dnf:
     name:
+
       - curl
+      - curl-minimal
       - git
       - unzip
       - docker
