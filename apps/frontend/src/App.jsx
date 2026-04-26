@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:8000`;
 
 const NAV_ITEMS = [
   { id: "overview", label: "Overview", kicker: "Command" },

@@ -1,13 +1,47 @@
 ---
-- name: Update apt cache
+- name: Update apt cache on Debian/Ubuntu
   ansible.builtin.apt:
     update_cache: true
+  when: ansible_os_family == "Debian"
 
-- name: Install base packages
+- name: Install base packages on Debian/Ubuntu
   ansible.builtin.apt:
     name:
       - curl
       - git
       - unzip
       - docker.io
+      - awscli
     state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install base packages on Amazon Linux/RHEL
+  ansible.builtin.dnf:
+    name:
+      - curl
+      - git
+      - unzip
+      - docker
+      - awscli
+    state: present
+  when: ansible_os_family in ["RedHat", "Amazon"]
+
+- name: Enable and start Docker
+  ansible.builtin.service:
+    name: docker
+    enabled: true
+    state: started
+
+- name: Install kubectl on Linux hosts
+  ansible.builtin.get_url:
+    url: "https://dl.k8s.io/release/v1.34.1/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: "0755"
+
+- name: Install Helm via official install script
+  ansible.builtin.shell: |
+    set -euo pipefail
+    curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/helm

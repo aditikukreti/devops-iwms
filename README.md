@@ -144,6 +144,60 @@ See:
 - [infra/terraform/environments/bootstrap/terraform.tfvars.example](/Users/aditikukreti/Desktop/devops%20project/infra/terraform/environments/bootstrap/terraform.tfvars.example:1)
 - [infra/terraform/environments/dev-foundation/backend.hcl.example](/Users/aditikukreti/Desktop/devops%20project/infra/terraform/environments/dev-foundation/backend.hcl.example:1)
 
+## Implementation Status (Completed So Far)
+
+This section tracks the real progress already executed for this project.
+
+### Source Control and Collaboration
+
+- Project code is initialized and pushed to GitHub repository `aditikukreti/devops-iwms`
+- Local `main` and `origin/main` are synchronized
+
+### AWS and Terraform
+
+- AWS CLI access verified with `sts get-caller-identity`
+- Terraform bootstrap applied successfully
+- Created `S3` remote state bucket: `inventory-platform-unique-state-bucket`
+- Created `DynamoDB` lock table: `inventory-platform-tf-lock`
+- Enabled state bucket versioning
+- Terraform `dev-foundation` applied successfully
+- Created `ECR` repositories:
+  - `inventory-platform-backend-api`
+  - `inventory-platform-frontend`
+
+### Docker and ECR Images
+
+- Built backend and frontend Docker images locally
+- Authenticated Docker to `ECR`
+- Pushed images to:
+  - `651312336385.dkr.ecr.ap-south-1.amazonaws.com/inventory-platform-backend-api:latest`
+  - `651312336385.dkr.ecr.ap-south-1.amazonaws.com/inventory-platform-frontend:latest`
+- Verified ECR access from EC2 and confirmed repositories are visible
+
+### Kubernetes (Local kind Cluster)
+
+- Verified local toolchain: `kind`, `kubectl`, `helm`
+- Built dev-tag images for local Kubernetes
+- Loaded images into kind cluster `inventory-dev`
+- Applied manifests from `k8s/base`
+- Verified workload health in namespace `inventory-dev`:
+  - `backend-api` running
+  - `frontend` running
+  - `postgres` running
+
+### CloudWatch Monitoring
+
+- Created EC2 baseline alarms:
+  - `iwms-ec2-cpu-high`
+  - `iwms-ec2-status-check-failed`
+
+### Ansible Automation
+
+- Validated and ran Ansible playbook for utility host bootstrap
+- Updated Ansible role to support Amazon Linux package management (`dnf`) along with Debian/Ubuntu (`apt`)
+- Resolved package conflict by using Amazon Linux-compatible package selection
+- Confirmed successful playbook run with no failures
+
 ## Goal
 
 Build a production-style system that covers:
