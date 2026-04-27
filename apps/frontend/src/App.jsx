@@ -7,7 +7,6 @@ const NAV_ITEMS = [
   { id: "inventory", label: "Inventory", kicker: "Stock" },
   { id: "warehouses", label: "Warehouses", kicker: "Sites" },
   { id: "movements", label: "Movements", kicker: "Flow" },
-  { id: "devops", label: "DevOps", kicker: "Platform" },
 ];
 
 const DEMO_USERS = [
@@ -294,9 +293,9 @@ export default function App() {
     <main className="app-shell">
       <aside className="sidebar">
         <div className="brand-block">
-          <p className="brand-kicker">InventoryOS</p>
+          <p className="brand-kicker">IWMS</p>
           <h1>Warehouse Control</h1>
-          <span>Dark ops panel for stock, sites, and delivery.</span>
+          <span>Management panel for stock, sites, and delivery.</span>
         </div>
         <nav className="side-nav">
           {NAV_ITEMS.map((item) => (
@@ -327,14 +326,9 @@ export default function App() {
           <>
             <section className="hero hero-grid">
               <div className="hero-copy panel panel-accent">
-                <p className="eyebrow">Dark Ops Command Center</p>
-                <h2>Warehouse flow, stock risk, and platform health in one control room.</h2>
-                <p className="subtitle">Run the app locally, ship through CI, and graduate to Kubernetes and AWS when the platform is ready.</p>
-                <div className="hero-badges"><span>Docker</span><span>FastAPI</span><span>PostgreSQL</span><span>React</span><span>Terraform</span><span>Ansible</span></div>
-              </div>
-              <div className="hero-side">
-                <section className="panel"><div className="section-heading"><span className="section-tag">Runtime</span><h3>Platform Status</h3></div><div className="status-grid"><article><span>API</span><strong>Online</strong></article><article><span>Database</span><strong>Connected</strong></article><article><span>Pipeline</span><strong>Ready</strong></article><article><span>Role</span><strong>{session.role}</strong></article></div></section>
-                <section className="panel"><div className="section-heading"><span className="section-tag">Delivery</span><h3>DevOps Path</h3></div><div className="pipeline-steps"><span className="active">Code</span><span className="active">Compose</span><span className="active">CI</span><span>kind</span><span>AWS</span></div></section>
+                <p className="eyebrow">IWMS Command Center</p>
+                <h2>Warehouse flow and stock risk in one control room.</h2>
+                <p className="subtitle">Manage inventory, track stock movements, and optimize warehouse capacity efficiently.</p>
               </div>
             </section>
             <section className="metrics"><MetricCard label="Total SKUs" value={summary?.totalSkus ?? 0} /><MetricCard label="Total Units" value={summary?.totalUnits ?? 0} /><MetricCard label="Low Stock Alerts" value={summary?.lowStock ?? 0} /><MetricCard label="Warehouses" value={summary?.warehouses ?? 0} /></section>
@@ -352,7 +346,6 @@ export default function App() {
 
         {activeView === "movements" ? <section className="section-stack"><section className="panel-grid forms"><section className="panel"><h3>Adjust Stock</h3>{canManage ? <form className="form-grid" onSubmit={handleAdjustmentSubmit}><select value={adjustmentForm.sku} onChange={(event) => handleAdjustmentSkuChange(event.target.value)} required><option value="">Select SKU</option>{items.map((item) => <option key={item.sku} value={item.sku}>{item.sku}</option>)}</select><select value={adjustmentForm.movement_type} onChange={(event) => setAdjustmentForm((current) => ({ ...current, movement_type: event.target.value }))}><option value="stock_in">Stock In</option><option value="stock_out">Stock Out</option></select><input type="number" min="1" placeholder="Quantity" value={adjustmentForm.quantity} onChange={(event) => setAdjustmentForm((current) => ({ ...current, quantity: event.target.value }))} required /><select value={adjustmentForm.warehouse_code} onChange={(event) => setAdjustmentForm((current) => ({ ...current, warehouse_code: event.target.value }))} required><option value="">Select warehouse</option>{warehouses.map((warehouse) => <option key={warehouse.code} value={warehouse.code}>{warehouse.code}</option>)}</select><button type="submit">Apply Adjustment</button></form> : <p className="subtitle">Viewer role can inspect movement history but cannot adjust stock.</p>}</section><section className="panel"><h3>Flow Snapshot</h3><div className="inventory-highlights"><InfoPill label="Stock In" value={stockInCount} /><InfoPill label="Stock Out" value={stockOutCount} /><InfoPill label="Events" value={movements.length} /></div></section></section><section className="panel"><div className="section-heading"><span className="section-tag">Movements</span><h3>Recent Stock Events</h3></div><div className="movement-list">{movements.map((movement) => <article key={`${movement.sku}-${movement.created_at}-${movement.movement_type}`} className="movement"><div><strong>{movement.movement_type.replace("_", " ")}</strong><p>{movement.sku}</p></div><div><span>{movement.quantity} units</span><p>{movement.warehouse_code}</p></div></article>)}</div></section></section> : null}
 
-        {activeView === "devops" ? <section className="section-stack"><section className="metrics"><MetricCard label="Docker Services" value={4} /><MetricCard label="CI Checks" value={5} /><MetricCard label="Terraform Layers" value={2} /><MetricCard label="Target Stage" value={"kind"} /></section><section className="panel-grid"><section className="panel"><div className="section-heading"><span className="section-tag">Automation</span><h3>Pipeline Map</h3></div><div className="ops-list"><article><strong>1. Local Build</strong><p>`docker compose up --build` boots the whole stack.</p></article><article><strong>2. Smoke Tests</strong><p>`make smoke` validates frontend, API, and database connectivity.</p></article><article><strong>3. CI Workflow</strong><p>GitHub Actions builds, scans with Trivy, starts Docker, and checks Terraform.</p></article><article><strong>4. Deployment Path</strong><p>Helm packages the app and Argo CD definitions prepare GitOps delivery.</p></article></div></section><section className="panel"><div className="section-heading"><span className="section-tag">Security</span><h3>Access Model</h3></div><div className="roadmap"><div className="roadmap-item current"><span>Admin</span><strong>Create, adjust, and delete</strong></div><div className="roadmap-item"><span>Manager</span><strong>Create and adjust stock</strong></div><div className="roadmap-item"><span>Viewer</span><strong>Read-only dashboard access</strong></div><div className="roadmap-item"><span>Next</span><strong>Move auth users into the database</strong></div></div></section></section></section> : null}
       </section>
     </main>
   );
