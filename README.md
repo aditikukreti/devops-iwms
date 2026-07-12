@@ -329,7 +329,7 @@ Application monitoring includes:
 ## Clone Repository
 
 ```bash
-git clone https://github.com/<YOUR_USERNAME>/devops-iwms.git
+git clone https://github.com/aditikukreti/devops-iwms.git
 
 cd devops-iwms
 ```
@@ -377,31 +377,7 @@ The pipeline automatically performs:
 
 ---
 
-# 📸 Screenshots
 
-## Dashboard
-
-> Add Screenshot Here
-
----
-
-## Jenkins Pipeline
-
-> Add Screenshot Here
-
----
-
-## Kubernetes Pods
-
-> Add Screenshot Here
-
----
-
-## Trivy Scan
-
-> Add Screenshot Here
-
----
 
 # 🎯 Future Enhancements
 
